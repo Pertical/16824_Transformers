@@ -9,8 +9,6 @@ Complete the TODOs in the `AttentionLayer` class in the file `transformer.py`
 
 
 
-
-
 Given query $q$, key $k$ and value $v$, these are first projected into the same embedding dimenion using separate linear projections. 
 
 The attention output is then given by : 

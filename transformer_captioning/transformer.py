@@ -14,11 +14,11 @@ class AttentionLayer(nn.Module):
         self.embed_dim = embed_dim
         # TODO: Initialize the following layers and parameters to perform attention
         # This class assumes that the input dimension for query, key and value is embed_dim
-        self.query_proj = ...
-        self.key_proj = ...
-        self.value_proj = ...
+        self.query_proj = 
+        self.key_proj =
+        self.value_proj = 
 
-        self.dropout = ...
+        self.dropout = 
             
     def forward(self, query, key, value, attn_mask=None):
         N, S, D = query.shape

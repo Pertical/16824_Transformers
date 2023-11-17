@@ -84,7 +84,7 @@ class MultiHeadAttentionLayer(AttentionLayer):
             # Hint : If mask[i,j] = 0, we want softmax(QKT[i,j] + additive_mask[i,j]) to be 0
             # Think about what inputs make softmax 0.
             additive_mask = (1 - attn_mask) * -1e9
-            dot_product += additive_mask
+            dot_product += additive_mask.to(query.device)
         
         # apply softmax, dropout, and use value
         drop_out = self.dropout(F.softmax(dot_product, dim=-1))
@@ -103,8 +103,10 @@ class PositionalEncoding(nn.Module):
         self.dropout = nn.Dropout(dropout)
       
     def forward(self, x):
+        #print(x.shape)
         N, S, D = x.shape
         # TODO - add the encoding to x
+
 
         output = x + self.encoding(torch.arange(S).to(x.device)).unsqueeze(0)
         output = self.dropout(output)
@@ -224,7 +226,10 @@ class TransformerDecoder(nn.Module):
         # expected feature embedding output shape : (N, 1, D) 
 
         feature_embedding = self.feature_embedding(features).unsqueeze(1)
-        caption_embedding = self.caption_embedding(captions) + self.positional_encoding(captions)
+
+        #caption_embedding = self.caption_embedding(captions) + self.positional_encoding(captions)
+        caption_embedding = self.caption_embedding(captions)
+        caption_embedding = self.positional_encoding(caption_embedding)
 
         return feature_embedding, caption_embedding
 

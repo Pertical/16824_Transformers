@@ -15,6 +15,9 @@ train_dataloader =  DataLoader(train_dataset, batch_size=64)
 val_dataset = CocoDataset(load_coco_data(max_val = 1024), 'val')
 val_dataloader =  DataLoader(val_dataset, batch_size=64)
 
+num_heads = 4
+num_layers = 6
+learning_rate = 1e-3
 
 device = 'cuda'
 transformer = TransformerDecoder(
@@ -22,15 +25,15 @@ transformer = TransformerDecoder(
           idx_to_word = train_dataset.data['idx_to_word'],
           input_dim=train_dataset.data['train_features'].shape[1],
           embed_dim=256,
-          num_heads=2,
-          num_layers=2,
+          num_heads=num_heads,
+          num_layers=num_layers,
           max_length=30,
           device = device
         )
 
 trainer = Trainer(transformer, train_dataloader, val_dataloader,
           num_epochs=100,
-          learning_rate=1e-4,
+          learning_rate=learning_rate,
           device = device
         )
 
@@ -40,9 +43,9 @@ trainer.train()
 plt.plot(trainer.loss_history)
 plt.xlabel('Iteration')
 plt.ylabel('Loss')
-os.makedirs('plots', exist_ok=True)
+os.makedirs('plots{}_{}_{}'.format(num_heads, num_layers, learning_rate), exist_ok=True)
 plt.title('Training loss history')
-plt.savefig('plots/' + exp_name + '_loss_out.png')
+plt.savefig('plots{}_{}_{}/'.format(num_heads, num_layers, learning_rate) + exp_name + '_loss_out.png')
 
 
 def vis_imgs(split):
@@ -64,7 +67,7 @@ def vis_imgs(split):
             plt.imshow(img)            
             plt.title('%s\n%s\nGT:%s' % (split, sample_caption, gt_caption))
             plt.axis('off')
-            plt.savefig('plots/' + exp_name + '_%s_%d.png' % (split, num_imgs))
+            plt.savefig('plots{}_{}_{}/'.format(num_heads, num_layers, learning_rate) + exp_name + '_%s_%d.png' % (split, num_imgs))
             num_imgs += 1
             if num_imgs >= 5: break
       return 

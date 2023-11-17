@@ -54,10 +54,22 @@ class ViT(nn.Module):
         self.num_classes = num_classes
         self.device = device
 
-        self.patch_embedding = None # TODO (Linear Layer that takes as input a patch and outputs a d_model dimensional vector)
-        self.positional_encoding = None # TODO (use the positional encoding from the transformer captioning solution)
-        self.fc = None # TODO (takes as input the embedding corresponding to the [CLS] token and outputs the logits for each class)
-        self.cls_token = None # TODO (learnable [CLS] token embedding)
+        self.patch_embedding = nn.Linear(self.patch_dim * self.patch_dim * 3, self.d_model)    
+        # TODO (Linear Layer that takes as input a patch and outputs a d_model dimensional vector)
+
+
+        self.positional_encoding = PositionalEncoding(self.d_model)
+        # TODO (use the positional encoding from the transformer captioning solution)
+
+
+        self.fc = nn.Linear(self.d_model, self.num_classes)
+        # TODO (takes as input the embedding corresponding to the [CLS] token and outputs the logits for each class)
+
+
+        self.cls_token = torch.randn(self.d_model).to(self.device)
+        # TODO (learnable [CLS] token embedding)
+
+
 
         self.layers = nn.ModuleList([EncoderLayer(d_model, num_heads, d_ff) for _ in range(num_layers)])
 

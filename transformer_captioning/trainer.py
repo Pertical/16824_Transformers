@@ -28,7 +28,7 @@ class Trainer(object):
         predictions = predictions.reshape(-1, predictions.shape[-1])
         labels = labels.reshape(-1)
 
-        loss = torch.nn.CrossEntropyLoss(ignore_index=0)(predictions, labels)
+        loss = torch.nn.CrossEntropyLoss(ignore_index=self.model._null)(predictions, labels)
         
         return loss
     

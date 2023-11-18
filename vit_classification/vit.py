@@ -88,6 +88,9 @@ class ViT(nn.Module):
 
         # TODO - Break images into a grid of patches
         # Feel free to use pytorch built-in functions to do this
+
+        images = images.transpose(1, 3)
+        images = images.reshape(images.shape[0], self.num_patches, -1)
         
         return images
 
@@ -102,8 +105,13 @@ class ViT(nn.Module):
         
         patches = self.patchify(images)
         patches_embedded = self.patch_embedding(patches)
+
+        N = images.shape[0]
+        cls_toks = self.cls_token.repeat(N, 1).unsqueeze(1)
+        patches_embedded = torch.cat([cls_toks, patches_embedded], dim=1) 
         
-        output = None # TODO (append a CLS token to the beginning of the sequence of patch embeddings)
+        #output = torch.cat((self.cls_token, patches_embedded), dim=1)
+        # TODO (append a CLS token to the beginning of the sequence of patch embeddings)
 
         output = self.positional_encoding(patches_embedded)
         mask = torch.ones((self.num_patches, self.num_patches), device=self.device)
@@ -111,7 +119,9 @@ class ViT(nn.Module):
         for layer in self.layers:
             output = layer(output, mask)
 
-        output = None # TODO (take the embedding corresponding to the [CLS] token and feed it through a linear layer to obtain the logits for each class)
+        output = output[:, 0, :].squeeze(dim=1)
+        output = self.fc(output)
+        # TODO (take the embedding corresponding to the [CLS] token and feed it through a linear layer to obtain the logits for each class)
 
         return output
 

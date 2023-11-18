@@ -1,3 +1,7 @@
 
 transformer_captioning/coco_captioning.zip
 *.zip
+*.h5
+*.pyc
+*.pyc
+*.pth

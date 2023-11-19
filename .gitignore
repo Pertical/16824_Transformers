@@ -5,3 +5,15 @@ transformer_captioning/coco_captioning.zip
 *.pyc
 *.pyc
 *.pth
+*.pyc
+*.zip
+*.zip
+vit_classification/data/cifar-10-batches-py/batches.meta
+vit_classification/data/cifar-10-batches-py/data_batch_1
+vit_classification/data/cifar-10-batches-py/data_batch_2
+vit_classification/data/cifar-10-batches-py/data_batch_3
+vit_classification/data/cifar-10-batches-py/data_batch_4
+vit_classification/data/cifar-10-batches-py/data_batch_5
+vit_classification/data/cifar-10-batches-py/readme.html
+vit_classification/data/cifar-10-batches-py/test_batch
+vit_classification/data/cifar-10-python.tar.gz
